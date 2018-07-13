@@ -1,22 +1,22 @@
+/* globals articles */
 'use strict';
 
 let articleView = {};
 
 articleView.populateFilters = () => {
-  $('article').each(function() {
-    if (!$(this).hasClass('template')) {
-      let val = $(this).find('address a').text();
-      let optionTag = `<option value="${val}">${val}</option>`;
+  // REVIEW: Add .not('.template') instead of if(!$(this).hasClass('template'))
+  $('article').not('.template').each(function() {
+    let val = $(this).find('address a').text();
+    let optionTag = `<option value="${val}">${val}</option>`;
 
-      if ($(`#author-filter option[value="${val}"]`).length === 0) {
-        $('#author-filter').append(optionTag);
-      }
+    if ($(`#author-filter option[value="${val}"]`).length === 0) {
+      $('#author-filter').append(optionTag);
+    }
 
-      val = $(this).attr('data-category');
-      optionTag = `<option value="${val}">${val}</option>`;
-      if ($(`#category-filter option[value="${val}"]`).length === 0) {
-        $('#category-filter').append(optionTag);
-      }
+    val = $(this).attr('data-category');
+    optionTag = `<option value="${val}">${val}</option>`;
+    if ($(`#category-filter option[value="${val}"]`).length === 0) {
+      $('#category-filter').append(optionTag);
     }
   });
 };
@@ -27,8 +27,8 @@ articleView.handleAuthorFilter = () => {
       $('article').hide();
       $(`article[data-author="${$(this).val()}"]`).fadeIn();
     } else {
-      $('article').fadeIn();
-      $('article.template').hide();
+      // REVIEW: Instead of .not('.template'), you can also use :not(.template) in the selector
+      $('article:not(.template)').fadeIn();
     }
     $('#category-filter').val('');
   });
@@ -40,8 +40,7 @@ articleView.handleCategoryFilter = () => {
       $('article').hide();
       $(`article[data-category="${$(this).val()}"]`).fadeIn();
     } else {
-      $('article').fadeIn();
-      $('article.template').hide();
+      $('article:not(.template)').fadeIn();
     }
     $('#author-filter').val('');
   });
